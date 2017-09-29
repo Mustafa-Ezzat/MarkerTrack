@@ -29,7 +29,7 @@ enum API {
     }
 }
 
-struct Option{
+public struct Option{
     var oldCoordinate = CLLocationCoordinate2DMake(CLLocationDegrees(40.74317), CLLocationDegrees(-74.00854))
     var finalCoordinate = CLLocationCoordinate2DMake(CLLocationDegrees(40.81210), CLLocationDegrees(-74.07241))
     var googleAPIKey = "Your API Key"
@@ -40,7 +40,7 @@ struct Option{
     var strokeWidth:CGFloat = 5
 }
 
-class MarkerTrack: NSObject{
+public class MarkerTrack: NSObject{
    
     var delegate:MarkerTrackDelegate!
     
@@ -61,7 +61,7 @@ class MarkerTrack: NSObject{
         counter = 0
         handleLocationManager()
     }
-    func handleCamera(coordinate:CLLocationCoordinate2D){
+    public func handleCamera(coordinate:CLLocationCoordinate2D){
         let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude, longitude: coordinate.longitude, zoom: zoomLevel)
         mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         delegate.locationUpdated()
@@ -72,7 +72,7 @@ class MarkerTrack: NSObject{
         // Add the map to the view, hide it until we&#39;ve got a location update.
         // mapView.isHidden = false
     }
-    func handleLocationManager(){
+    public func handleLocationManager(){
         locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()
@@ -80,7 +80,7 @@ class MarkerTrack: NSObject{
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
     }
-    func createMarker(){
+    public func createMarker(){
         driverMarker = GMSMarker()
         driverMarker.position = option.oldCoordinate
         driverMarker.icon = UIImage(named: "\(option.markerImage)")
@@ -88,7 +88,7 @@ class MarkerTrack: NSObject{
     }
 
     
-    func move(marker:GMSMarker, source:CLLocationCoordinate2D, destination:CLLocationCoordinate2D, inMapView:GMSMapView, withBearing:Double){
+    public func move(marker:GMSMarker, source:CLLocationCoordinate2D, destination:CLLocationCoordinate2D, inMapView:GMSMapView, withBearing:Double){
         let bearing = getBearing(source: source, destination: destination)
         marker.groundAnchor = CGPoint(x: CGFloat(0.5), y: CGFloat(0.5))
         marker.rotation = bearing
@@ -109,7 +109,7 @@ class MarkerTrack: NSObject{
         CATransaction.commit()
     }
     
-    func getBearing(source: CLLocationCoordinate2D ,destination: CLLocationCoordinate2D) -> Double {
+    public func getBearing(source: CLLocationCoordinate2D ,destination: CLLocationCoordinate2D) -> Double {
         func degreesToRadians(degrees: Double) -> Double { return degrees * Double.pi / 180.0 }
         func radiansToDegrees(radians: Double) -> Double { return radians * 180.0 / Double.pi }
         
@@ -128,7 +128,7 @@ class MarkerTrack: NSObject{
         return radiansToDegrees(radians: radiansBearing)
     }
     
-    func drawPath()
+    public func drawPath()
     {
         let params = API.Params.self        
         let url = API.apiUrl + "json?" + params.Keys.origin + "\(option.oldCoordinate.latitude),\(option.oldCoordinate.longitude)" + "&"  + params.Keys.destination + "\(option.finalCoordinate.latitude),\(option.finalCoordinate.longitude)" + "&"  + params.Keys.mode +  "\(option.mapMode)" + "&"  + params.Keys.key +  "\(option.googleAPIKey)"
@@ -161,7 +161,7 @@ class MarkerTrack: NSObject{
         }
     }
     
-    func timerTriggered() {
+    public func timerTriggered() {
         if counter < coordinates.count {
             let newCoordinate = coordinates[counter]
             move(marker: driverMarker, source: option.oldCoordinate, destination: newCoordinate, inMapView: mapView, withBearing: 0)
@@ -174,7 +174,7 @@ class MarkerTrack: NSObject{
         }
     }
     
-    func moveMarker(marker: GMSMarker){
+    public func moveMarker(marker: GMSMarker){
         driverMarker = marker
         driverMarker.map = mapView
         
@@ -187,7 +187,7 @@ class MarkerTrack: NSObject{
 extension MarkerTrack: CLLocationManagerDelegate, GMSMapViewDelegate {
     
     // Handle incoming location events.
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location: CLLocation = locations.last!
         
         option.oldCoordinate = location.coordinate
@@ -201,7 +201,7 @@ extension MarkerTrack: CLLocationManagerDelegate, GMSMapViewDelegate {
     }
     
     // Handle authorization for the location manager.
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .restricted:
             print("Location access was restricted.")
@@ -218,12 +218,12 @@ extension MarkerTrack: CLLocationManagerDelegate, GMSMapViewDelegate {
     }
     
     // Handle location manager errors.
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         locationManager.stopUpdatingLocation()
         print("Error: \(error)")
     }
     
-    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+    public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
         cameraLocation = position.target
     }
     
