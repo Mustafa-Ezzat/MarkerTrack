@@ -9,10 +9,7 @@ target 'MarkerTrack' do
   # Pods for MarkerTrack
   pod 'Alamofire', '~> 4.5’
   pod 'SwiftyJSON'
-  pod 'GooglePlaces'
-  pod 'GooglePlacePicker'
   pod 'GoogleMaps'
-
 end
 
 post_install do |installer|

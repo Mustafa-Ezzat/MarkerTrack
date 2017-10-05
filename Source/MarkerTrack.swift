@@ -9,9 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import GoogleMaps
-import GooglePlaces
-import GooglePlacePicker
+//import GoogleMaps
 
 protocol MarkerTrackDelegate {
     func locationUpdated()
